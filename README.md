@@ -128,3 +128,5 @@ composer dump-autoload
 - [ ] Add workflow file to run tests on GitHub
 - [ ] Update Dockerfile
 - [ ] Add Dockerfile just for unit tests
+- [ ] Add more unit test coverage
+
