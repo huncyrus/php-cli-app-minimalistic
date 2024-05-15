@@ -16,6 +16,27 @@
 - MySQL (see docker-compose file)
 - `.env` file (Based on the `.env.example` file)
 
+### Env content
+
+| Key                     |    Desc                                           |
+| ----------------------- | ------------------------------------------------- |
+| API_BASE_URL            | HTTP API endpoint, base URL only                  |
+| API_BASE_PATH           | HTTP API endpoint path, example: `/api/v1/ping`   |
+| API_KEY                 | HTTP API key                                      |
+| API_SECRET              | HTTP API secret/password                          |
+| DB_HOST                 | MySQL host, example `127.0.0.1:3306`              |
+| DB_DATABASE             | Database name                                     |
+| DB_USERNAME             | Database user, example: `user`                    |
+| DB_PASSWORD             | DB pass                                           |
+| DB_ROOT_PASS            | DB Root pass                                      |
+| DB_TEST_HOST            | Test Database host                                |
+| DB_TEST_DATABASE        | Test database name                                |
+| DB_TEST_USERNAME        | Test DB username                                  |
+| DB_TEST_PASSWORD        | Test DB pass                                      |
+| DB_TEST_ROOT_PASS       | Test DB root pass
+
+> Note: the test database credentials used for unit testing
+
 ### Docker
 
 #### use the env file with docker-compose
