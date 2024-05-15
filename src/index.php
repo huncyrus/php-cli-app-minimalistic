@@ -3,18 +3,33 @@
 
 require_once './vendor/autoload.php';
 
-use GB\CLI_APP\Commands;
 use GB\CLI_APP\Commands\HelpCommand;
 use GB\CLI_APP\Commands\UnknownCommand;
 use GB\CLI_APP\Commands\VersionCommand;
-
+use GB\CLI_APP\Commands\GetResultsCommand;
+use GB\CLI_APP\Commands\CallApiCommand;
+use GB\CLI_APP\Libs\HttpHelper;
+use GB\CLI_APP\Libs\DB;
+use GB\CLI_APP\Models\SaveResultsModel;
+use GB\CLI_APP\Models\GetResultsModel;
 
 // Check for mandatory ENV
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->safeLoad();
 
 try {
-    $dotenv->required(['API_URL', 'API_KEY', 'API_SECRET']);
+    $dotenv->required(
+        [
+            'API_BASE_URL', 
+            'API_BASE_PATH',
+            'API_KEY', 
+            'API_SECRET', 
+            'DB_HOST', 
+            'DB_USERNAME', 
+            'DB_PASSWORD', 
+            'DB_ROOT_PASS'
+        ]
+    );
 } catch(Exception $err) {
     echo 'Missing mandatory env entry: ' . $err->getMessage() . "\n";
 
@@ -30,17 +45,17 @@ if ($appType !== 'cli') {
     exit(0);
 }
 
-print "Test Assignment CLI \n";
+// Init db and share with commands
+$db = new DB();
+$grModel = new GetResultsModel($db);
+$srModel = new SaveResultsModel($db);
+$httpClient = new HttpHelper();
 
-// Exit if the argument amount is not sufficient
-// @note I opted to not handling more due the assignment requirements
-/*
-if ($argc != 2) {
-    print 'Please check the --help argument for syntax.' . "\n";
+print "Test Assignment PHP CLI Application \n";
 
-    exit(0);
+if (!isset($argv[1])) {
+    $argv[1] = '--help';
 }
-*/
 
 switch($argv[1]) {
     case '--help':
@@ -48,22 +63,36 @@ switch($argv[1]) {
     case '-h':
         $helpCommand = new HelpCommand();
         $helpCommand->run();
+
         break;
     case '--version':
     case 'version':
     case '-v':
         $versionCommand = new VersionCommand();
         $versionCommand->run();
+
         break;
     case 'call-api':
     case '--call-api':
+    case '--ca':
     case '-ca':
-        // call api command
+        $caCommand = new CallApiCommand($srModel, $httpClient);
+        $caCommand->run();
         break;
     case 'get-results':
     case '--get-results':
+    case '--gr':
     case '-gr':
-        // check $argv[2] for limit of results
+        $limit = 10;
+
+        if (isset($argv[2])) {
+            $limit = (int)$argv[2];
+        }
+
+        $grCommand = new GetResultsCommand($grModel);
+        $grCommand->setLimit($limit);
+        $grCommand->run();
+
         break;
     default: 
         $unknownCommand = new UnknownCommand();

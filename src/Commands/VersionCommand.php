@@ -6,10 +6,12 @@ use GB\CLI_APP\Interfaces;
 use GB\CLI_APP\Interfaces\CommandBase;
 
 /**
- * Unknown Command handler
- * Very simple message for not valid, missing or malformatted commands.
+ * Version Command handler
+ * Displays the application version info
+ *
+ * @note it is hardcoded, would be nicer to get the version from env or app version/composer file.
  */
-class VersionCommand {
+class VersionCommand implements CommandBase {
     public function run() {
         echo 'Version 1.0.0' . "\n";
         echo '  (c) Copyright Györk Bakonyi <gyork@bakonyi.info>' . "\n";

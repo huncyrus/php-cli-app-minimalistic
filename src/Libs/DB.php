@@ -1,26 +1,32 @@
 <?php
 
-namespace App\Database;
+namespace GB\CLI_APP\Libs;
 
 use PDO;
+use GB\CLI_APP\Interfaces\DatabaseBase;
 
 /**
  * Minimalist PDO db wrapper
- * @note Normally the wrapper and the actual queries would be separated into a db layer and model \
- *       but the size of this project does not require such structure.
+ * @note Thiw file has one responsibility to connect to the database
+ * @note the $_ENV should be populated at the point when this class instantiated therefore no validation present
  */
-class DB {
+class DB implements DatabaseBase {
     private PDO $pdo;
 
     public function __construct() {
-        $this->connectToDatabase();
+        $this->connect();
     }
 
-    private function connectToDatabase() {
-        $host = getenv('DB_HOST');
-        $db   = getenv('DB_DATABASE');
-        $user = getenv('DB_USERNAME');
-        $pass = getenv('DB_PASSWORD');
+    /**
+     * @return void
+     * @throw PDOException
+     * @note on error this might leak some env or config details
+     */
+    private function connect() {
+        $host = $_ENV['DB_HOST'];
+        $db   = $_ENV['DB_DATABASE'];
+        $user = $_ENV['DB_USERNAME'];
+        $pass = $_ENV['DB_PASSWORD'];
         $charset = 'utf8mb4';
 
         $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
@@ -33,19 +39,11 @@ class DB {
         try {
             $this->pdo = new PDO($dsn, $user, $pass, $options);
         } catch (\PDOException $e) {
-            throw new \PDOException($e->getMessage(), (int)$e->getCode());
+            throw new \PDOException('Could not connect to the database: ' . $e->getMessage(), (int)$e->getCode());
         }
     }
 
-    public function saveResult(array $result) : void {
-        $stmt = $this->pdo->prepare("INSERT INTO api_calls (status, data) VALUES (?, ?)");
-
-        $stmt->execute([$result['status'], $result['data']]);
-    }
-
-    public function getResults() : array {
-        $stmt = $this->pdo->query("SELECT * FROM api_calls ORDER BY created_at DESC");
-
-        return $stmt->fetchAll();
-    }
+    public function getPdo(): PDO {
+        return $this->pdo;
+    }    
 }
