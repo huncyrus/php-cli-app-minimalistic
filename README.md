@@ -124,5 +124,7 @@ composer dump-autoload
 - [ ] Configure `PHPMD`
 - [ ] Configure `PHP-cs-fixer`
 - [ ] Configure `PHP-stan`
-- [ ] Create DTO for models (see `SaveResultsModel.php:23`)
-- 
+- [ ] Create DTO for models (see `SaveResultsModel.php:23` or `GetResultsModel.php:26`)
+- [ ] Add workflow file to run tests on GitHub
+- [ ] Update Dockerfile
+- [ ] Add Dockerfile just for unit tests
