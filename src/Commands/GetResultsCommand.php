@@ -25,11 +25,11 @@ class GetResultsCommand implements CommandBase {
      * Formatting the result pint, checks for the array size
      *
      * @note if the input $res is empty then it exit early
-     * @param Array $res data set from database
+     * @param array $res data set from database
      * @return void
      */
     private function formatResults (array $res): void {
-        if (empty($res) || 0 === count($res)) {
+        if (empty($res)) {
             print "  No stored results. \n";
             return;
         }

@@ -18,8 +18,8 @@ class GetResultsModel {
     /**
      * Returns the last few db entry
      *
-     * @param {int} $limit if less than 1 then it defaults to 10. Max 500.
-     * @return {array}
+     * @param int $limit if less than 1 then it defaults to 10. Max 500.
+     * @return array
      * @throw PDOException
      * @deprecated
      */

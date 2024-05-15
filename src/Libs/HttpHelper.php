@@ -41,7 +41,7 @@ class HttpHelper {
      * @throws GuzzleException
      */
     public function callApi(): HttpClientCallApiDto {
-        if (rand(1, 100) <= 20) {
+        if ($this->simulateFailure()) {
             return new HttpClientCallApiDto('fail', '{"message": "Simulated failure"}');
         }
 
@@ -58,5 +58,12 @@ class HttpHelper {
         } catch (GuzzleException $e) {
             return new HttpClientCallApiDto('error', $e->getMessage());
         }
+    }
+
+    /**
+     * Extremely minimalistic simulation of a request failure (20% chance of failure)
+     */
+    protected function simulateFailure(): bool {
+        return rand(1, 100) <= 20;
     }
 }

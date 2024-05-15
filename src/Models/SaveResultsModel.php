@@ -17,6 +17,7 @@ class SaveResultsModel {
 
     /**
      * Saves one result into db
+     * @param array $result
      * @return void
      * @throw PDOException
      */

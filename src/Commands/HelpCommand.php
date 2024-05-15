@@ -7,9 +7,10 @@ use GB\CLI_APP\Interfaces\CommandBase;
 
 /**
  * Printing out the application arguments/parameters
+ * @return void
  */
 class HelpCommand implements CommandBase {
-    public function run() {
+    public function run(): void {
         $content = "Usage:  \n";
         $content .= " php index.php [command] [optional-value] \n\n";
         $content .= "Available commands: \n";
